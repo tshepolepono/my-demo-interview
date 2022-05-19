@@ -275,6 +275,9 @@ resource "aws_iam_instance_profile" "ecs_agent" {
 * ingress.  With out this the Target Group won't be able to reach the instances
 * (and thus the containers) and the health checks will fail, causing the
 * instances to be deregistered.
+*
+* Allowing all traffic between ALB and ASG caters for node dynamic ports
+* This traffic is private and internal 
 */
 resource "aws_security_group" "autoscaling_group" {
   name        = "ceros-ski-${var.environment}-autoscaling_group"
@@ -366,6 +369,8 @@ resource "aws_autoscaling_group" "cluster" {
 * The Security Group used by the Elastic Load Balancer that will sit in front
 * of our ECS services.  It needs to allow HTTP ingress or else we won't be able
 * to reach our service from the outside world.
+*
+* Set port to 80 and protocol to tcp to allow only http inbound
 */
 resource "aws_security_group" "ecs_load_balancer" {
   name        = "ceros-ski-${var.environment}-ecs_load_balancer"
@@ -374,9 +379,9 @@ resource "aws_security_group" "ecs_load_balancer" {
 
   ingress {
     description = "HTTP Ingress"
-    from_port   = 0 
-    to_port     = 0 
-    protocol    = "-1"
+    from_port   = 80 
+    to_port     = 80 
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
