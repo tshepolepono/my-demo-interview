@@ -1,5 +1,5 @@
 variable "ecr_scan_on_push" {
-  type = string
+  type = bool
   description = "Variable (True/False) to enable image scan to determine security vulnerabilities on push"
 }
 

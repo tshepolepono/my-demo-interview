@@ -9,7 +9,7 @@ terraform {
 }
 
 module "aws_ecr_repository"{
-   source = "./infrastructure/repositories"
+   source = "./modules/repositories"
    ecr_scan_on_push = true
    aws_ecr_tag_mutability = "MUTABLE"
    aws_ecr_name = "ceros-ski"
