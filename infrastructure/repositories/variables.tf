@@ -1,14 +1,15 @@
-variable "aws_credentials_file" {
+variable "ecr_scan_on_push" {
   type = string
-  description = "The file that contains the AWS credentials we will use."
+  description = "Variable (True/False) to enable image scan to determine security vulnerabilities on push"
 }
 
-variable "aws_profile" {
+variable "aws_ecr_tag_mutability" {
   type = string
-  description = "The name of the AWS credentials profile we will use."
+  description = "Variale to determine if tags should overwritten or not."
 }
 
-variable "aws_region" {
+variable "aws_ecr_name" {
   type = string
-  description = "The name of the AWS Region we'll launch into."
+  description = "The name of AWS ECR repository."
 }
+
