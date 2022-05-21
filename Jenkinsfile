@@ -11,7 +11,7 @@ pipeline {
 
 
   
-  stages {
+  
       stage('SAST SonarQube') {
             steps {
               nodejs(nodeJSInstallation: 'nodejs'){
@@ -19,6 +19,6 @@ pipeline {
               }
             }
         }
-  }
+  
 }
 }
