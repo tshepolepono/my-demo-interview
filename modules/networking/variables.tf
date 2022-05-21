@@ -1,3 +1,9 @@
+variable "environment" {
+  type = string
+  description = "The name of the environment we'd like to launch."
+  default = "production"
+}
+
 variable "vpc_cidr" {
   type = string
   description = "Variable (True/False) to enable image scan to determine security vulnerabilities on push"
@@ -44,7 +50,7 @@ variable "subnet_2_map_public_IP" {
 }
 
 
-variable "dest_cidr" {
+variable "open_to_internet_cidr" {
   type = string
   description = "Name of the second availability zone"
   default = "0.0.0.0/0"

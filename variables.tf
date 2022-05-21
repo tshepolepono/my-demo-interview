@@ -12,3 +12,11 @@ variable "aws_region" {
   type = string
   description = "The name of the AWS Region we'll launch into."
 }
+
+variable "environment" {
+  type = string
+  description = "The name of the environment we'd like to launch."
+  default = "production"
+}
+
+

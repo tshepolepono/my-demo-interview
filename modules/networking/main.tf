@@ -79,7 +79,7 @@ resource "aws_route_table" "public_1_route_table" {
 */
 resource "aws_route" "route_from_public_1_route_table_to_internet" {
   route_table_id = aws_route_table.public_1_route_table.id
-  destination_cidr_block = var.dest_cidr
+  destination_cidr_block = var.open_to_internet_cidr
   gateway_id = aws_internet_gateway.main_internet_gateway.id
 
 }
@@ -135,7 +135,7 @@ resource "aws_route_table" "public_2_route_table" {
 */
 resource "aws_route" "route_from_public_2_route_table_to_internet" {
   route_table_id = aws_route_table.public_2_route_table.id
-  destination_cidr_block = var.dest_cidr
+  destination_cidr_block = var.open_to_internet_cidr
   gateway_id = aws_internet_gateway.main_internet_gateway.id
 
 }
