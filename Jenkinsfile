@@ -1,4 +1,4 @@
-// Devsecops pipeline ok
+// Devsecops pipeline ok check
 pipeline {
   agent any
   
