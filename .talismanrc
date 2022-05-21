@@ -1,0 +1,3 @@
+gnoreconfig:
+- filename: app/test-secrets-talisman
+  checksum: 9866f5a5da201b352f6739e789b278c905df12a535c0b484925064673ea51ee0
