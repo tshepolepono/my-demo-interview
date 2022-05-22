@@ -28,7 +28,7 @@ pipeline {
              //def scannerHome = tool name: 'sonar_scanner';
              withSonarQubeEnv('SonarQube') {
                 nodejs(nodeJSInstallationName: 'nodejs'){
-                  sh "/home/Jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonarqubescanner/bin/sonar-scanner -Dsonar.projectKey=ceros-ski -Dsonar.sources=app -Dsonar.host.url=http://devsecops-tshepo.northeurope.cloudapp.azure.com:9000"
+                  sh "/home/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonar_scanner/bin/sonar-scanner -Dsonar.projectKey=ceros-ski -Dsonar.sources=app -Dsonar.host.url=http://devsecops-tshepo.northeurope.cloudapp.azure.com:9000"
               }
            }
             // }
