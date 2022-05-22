@@ -37,7 +37,7 @@ pipeline {
           //    waitForQualityGate abortPipeline: true
           //   }
           //  }
-             sh "nodejsscan -d app --output /{JENKINS HOME DIRECTORY}/reports/nodejsscan-report'"
+             sh "nodejsscan -d app --output /{JENKINS HOME DIRECTORY}/reports/nodejsscan-report"
          }
        }
   
