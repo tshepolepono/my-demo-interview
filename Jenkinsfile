@@ -1,7 +1,9 @@
 // Devsecops pipeline ok check
 pipeline {
   agent any
+  
 
+  
   stages {
       stage('Clone') {
             steps {
@@ -9,7 +11,12 @@ pipeline {
             }
         }
 
-
+  stage('Build Artifact') {
+            steps {
+              sh "mvn clean package -DskipTests=true" //skip awe wwww
+              archive 'target/*.jar'
+            }
+        }
   
   //check pwd
       stage('Download packages') {
