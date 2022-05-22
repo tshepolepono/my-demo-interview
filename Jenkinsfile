@@ -52,7 +52,7 @@ pipeline {
     stage('Scan Terraform Code') {
       agent {
         docker { 
-          image 'tfsec/tfsec-ci:v1.20.0' 
+          image 'tfsec/tfsec-ci:v0.57.1' 
           reuseNode true
         }
       }
