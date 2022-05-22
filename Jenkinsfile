@@ -11,7 +11,7 @@ pipeline {
 
 
   
-  
+  //check pwd
       stage('SAST SonarQube') {
             steps {
               nodejs(nodeJSInstallationName: 'nodejs'){
