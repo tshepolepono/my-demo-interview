@@ -55,7 +55,7 @@ data "aws_iam_policy_document" "ecs_agent" {
       "ecr:BatchGetImage",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
-      "s3:*"
+      //"s3:*"
     ]
     resources = [
       "*"
@@ -228,8 +228,8 @@ resource "aws_security_group" "ecs_load_balancer" {
 
   ingress {
     description = "HTTP Ingress"
-    from_port   = 0 
-    to_port     = 0 
+    from_port   = 80 
+    to_port     = 80
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }

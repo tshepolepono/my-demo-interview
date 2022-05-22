@@ -192,20 +192,6 @@ variable "ecs_service_iam_role" {
   description = "The name of the AWS Region we'll launch into."
 }
 
-# variable "ecs_task_definition_container_port" {
-#   type = number
-#   description = "The name of the AWS Region we'll launch into."
-# }
-
-# variable "ecs_task_definition_container_hostport" {
-#   type = number
-#   description = "The name of the AWS Region we'll launch into."
-# }
-# variable "ecs_task_definition_container_protocol" {
-#   type = string
-#   description = "The name of the AWS Region we'll launch into."
-# }
-
 
 
 variable "ecs_service_backend_name" {
@@ -213,10 +199,6 @@ variable "ecs_service_backend_name" {
   description = "The name of the AWS Region we'll launch into."
 }
 
-# variable "ecs_service_backend_name" {
-#   type = string
-#   description = "The name of the AWS Region we'll launch into."
-# }
 
 
 

@@ -63,22 +63,11 @@ module "ecs_resources"{
     ecs_task_definition_family = "ceros-ski-${var.environment}-backend"
     ecs_task_definition_network_mode = "bridge"
     ecs_task_definition_container_name = "ceros-ski"
-    # ecs_task_definition_container_image = "760195539997.dkr.ecr.us-east-1.amazonaws.com/ceros-ski:latest"
-    # ecs_task_definition_container_env_name = "PORT"
-    # ecs_task_definition_container_env_value = "80"
-    # ecs_task_definition_container_cpu_reservation = 512
-    # ecs_task_definition_container_memory_reservation = 512
-    # ecs_task_definition_container_port = 80
-    # ecs_task_definition_container_hostport = 80 
-    # ecs_task_definition_container_protocol = "tcp"
     ecs_service_iam_role = "AWSServiceRoleForECS"
     ecs_service_backend_name = "ceros-ski-${var.environment}-backend"
     ecs_service_desired_count = 2 
     ecs_service_deployment_minimum_healthy_percent = 50
     ecs_service_deployment_maximum_percent = 100
 
-    depends_on = [
-    
-  ]
 
 }
