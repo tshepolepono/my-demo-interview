@@ -10,16 +10,9 @@ pipeline {
               git branch: 'main', url: 'https://github.com/tshepolepono/my-demo-interview.git'
             }
         }
-
-  stage('Build Artifact') {
-            steps {
-              sh "mvn clean package -DskipTests=true" //skip awe wwww
-              archive 'target/*.jar'
-            }
-        }
   
   //check pwd
-      stage('Download packages') {
+  stage('Download packages') {
             steps {
               nodejs(nodeJSInstallationName: 'nodejs'){
             
@@ -31,13 +24,14 @@ pipeline {
       
       stage('SonarQube SAST') {
            steps {
+             script{ 
+             def scannerHome = tool 'sonarscan';
              withSonarQubeEnv('SonarQube') {
                 nodejs(nodeJSInstallationName: 'nodejs'){
-                  sh "npm install sonar-scanner"
-                  sh "npm run sonar-scanner"
-                  //sh "${scannerHome}/bin/sonar-scanne -Dsonar.projectKey=ceros-ski -Dsonar.sources=app -Dsonar.host.url=http://devsecops-tshepo.northeurope.cloudapp.azure.com:9000"
+                  sh "${tool('scannerHome')}/bin/sonar-scanner -Dsonar.projectKey=ceros-ski -Dsonar.sources=app -Dsonar.host.url=http://devsecops-tshepo.northeurope.cloudapp.azure.com:9000"
               }
            }
+             }
             timeout(time: 2, unit: 'MINUTES') {
            script {
              waitForQualityGate abortPipeline: true
