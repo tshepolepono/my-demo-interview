@@ -15,7 +15,7 @@ pipeline {
       stage('SAST SonarQube') {
             steps {
               nodejs(nodeJSInstallationName: 'nodejs'){
-                sh "pwd"
+                sh "cd app"
                 sh "npm install"
               }
             }
