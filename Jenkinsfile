@@ -37,7 +37,7 @@ pipeline {
           //    waitForQualityGate abortPipeline: true
           //   }
           //  }
-             sh "npm check app"
+             sh "npm audit app"
          }
        }
   
