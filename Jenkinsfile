@@ -21,7 +21,13 @@ pipeline {
               }
             }
         }
-      
+       stage('SCA - Synk') {
+            steps {
+               snykSecurity severity: 'high', snykInstallation: 'synk', snykTokenId: 'demo-synk-token', targetFile: 'package.json'
+              }
+            }
+        
+     
       stage('nodejsscan - SAST') {
            steps {
           //   // script{ 
