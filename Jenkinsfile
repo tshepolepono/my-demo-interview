@@ -16,6 +16,7 @@ pipeline {
             steps {
               nodejs(nodeJSInstallationName: 'nodejs'){
                 sh "cd app"
+                sh "cd pwd"
                 sh "npm install"
               }
             }
