@@ -1,6 +1,6 @@
 FROM node:alpine
-RUN addgroup -S pipeline && adduser -S k8s-pipeline -G pipeline
-USER k8s-pipeline
+RUN addgroup -S pipeline && adduser -S docker-pipeline -G pipeline
+USER docker-pipeline
 WORKDIR /usr/src/app
 COPY . .
 RUN npm ci --only-production && npm run build
