@@ -41,7 +41,12 @@ pipeline {
       }
     
     stage('IaaC Scanning') {
-      
+      agent {
+        docker { 
+          image 'tfsec/tfsec-ci:v0.57.1' 
+          reuseNode true
+        }
+      }
       steps {
 	     parallel(
           "Terraform Scan - tfsec": {
