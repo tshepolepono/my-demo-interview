@@ -1,0 +1,761 @@
+ Result 1
+
+
+
+  [aws-vpc-no-public-egress-sg][CRITICAL] Resource 'module.ecs_resources:aws_security_group.ecs_load_balancer' defines a fully open egress security group.
+
+  /var/lib/jenkins/workspace/ceros-ski/modules/ecs_resources/main.tf:241
+
+
+
+
+
+     238 |     from_port   = 0
+
+     239 |     to_port     = 0
+
+     240 |     protocol    = "-1"
+
+     241 |     cidr_blocks = ["0.0.0.0/0"]
+    list: ["0.0.0.0/0"]
+
+     242 |   }
+
+     243 | 
+
+     244 |   tags = {
+
+
+
+  Legacy ID:  AWS009
+
+  Impact:     The port is exposed for egressing data to the internet
+
+  Resolution: Set a more restrictive cidr range
+
+
+
+  More Info:
+
+  - https://tfsec.dev/docs/aws/vpc/no-public-egress-sg#aws/vpc 
+
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group 
+
+
+
+  Result 2
+
+
+
+  [aws-vpc-no-public-ingress-sg][CRITICAL] Resource 'module.ecs_resources:aws_security_group.ecs_load_balancer' defines a fully open ingress security group.
+
+  /var/lib/jenkins/workspace/ceros-ski/modules/ecs_resources/main.tf:234
+
+
+
+
+
+     231 |     from_port   = 80 
+
+     232 |     to_port     = 80 
+
+     233 |     protocol    = "tcp"
+
+     234 |     cidr_blocks = ["0.0.0.0/0"]
+    list: ["0.0.0.0/0"]
+
+     235 |   }
+
+     236 | 
+
+     237 |   egress {
+
+
+
+  Legacy ID:  AWS008
+
+  Impact:     The port is exposed for ingress from the internet
+
+  Resolution: Set a more restrictive cidr range
+
+
+
+  More Info:
+
+  - https://tfsec.dev/docs/aws/vpc/no-public-ingress-sg#aws/vpc 
+
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group 
+
+
+
+  Result 3
+
+
+
+  [aws-elbv2-http-not-used][CRITICAL] Resource 'module.ecs_resources:aws_lb_listener.backend' uses plain HTTP instead of HTTPS.
+
+  /var/lib/jenkins/workspace/ceros-ski/modules/ecs_resources/main.tf:292
+
+
+
+
+
+     289 | resource "aws_lb_listener" "backend" {
+
+     290 |   load_balancer_arn = aws_lb.ecs.arn 
+
+     291 |   port = var.aws_lb_listener_port
+
+     292 |   protocol = var.aws_lb_listener_protocol
+    string: "HTTP"
+
+     293 |  
+
+     294 |   default_action {
+
+     295 |     type = var.aws_lb_listener_default_action_type
+
+
+
+  Legacy ID:  AWS004
+
+  Impact:     Your traffic is not protected
+
+  Resolution: Switch to HTTPS to benefit from TLS security features
+
+
+
+  More Info:
+
+  - https://tfsec.dev/docs/aws/elbv2/http-not-used#aws/elbv2 
+
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener 
+
+  - https://www.cloudflare.com/en-gb/learning/ssl/why-is-http-not-secure/ 
+
+
+
+  Result 4
+
+
+
+  [aws-iam-no-policy-wildcards][HIGH] Resource 'module.ecs_resources:data.aws_iam_policy_document.ecs_agent' defines a policy with wildcarded resources.
+
+  /var/lib/jenkins/workspace/ceros-ski/modules/ecs_resources/main.tf:60-62
+
+
+
+
+
+      57 |       "logs:PutLogEvents",
+
+      58 |       "s3:*"
+
+      59 |     ]
+
+      60 |     resources = [
+    list: ["*"]
+
+      61 |       "*"
+
+      62 |     ]
+
+      63 |   }
+
+      64 | }
+
+      65 | 
+
+
+
+  Legacy ID:  AWS099
+
+  Impact:     Overly permissive policies may grant access to sensitive resources
+
+  Resolution: Specify the exact permissions required, and to which resources they should apply instead of using wildcards.
+
+
+
+  More Info:
+
+  - https://tfsec.dev/docs/aws/iam/no-policy-wildcards#aws/iam 
+
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document 
+
+  - https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html 
+
+
+
+  Result 5
+
+
+
+  [aws-ecr-repository-customer-key][LOW] Resource 'module.aws_ecr_repository:aws_ecr_repository.ceros_ski' does not have CMK encryption configured
+
+  /var/lib/jenkins/workspace/ceros-ski/modules/repositories/main.tf:15-25
+
+
+
+
+
+      12 | /**
+
+      13 | *  scan_on_push to see image security vulnerabilities
+
+      14 | */
+
+      15 | resource "aws_ecr_repository" "ceros_ski" {
+
+      16 |   
+
+      17 |   name  = var.aws_ecr_name
+
+      18 |   image_tag_mutability = var.aws_ecr_tag_mutability
+
+      19 | 
+
+      20 |   image_scanning_configuration {
+
+      21 |     
+
+      22 | 	   scan_on_push = var.ecr_scan_on_push
+
+      23 |   }
+
+      24 | 
+
+      25 | }
+
+      26 | 
+
+
+
+  Legacy ID:  AWS093
+
+  Impact:     Using AWS managed keys does not allow for fine grained control
+
+  Resolution: Use customer managed keys
+
+
+
+  More Info:
+
+  - https://tfsec.dev/docs/aws/ecr/repository-customer-key#aws/ecr 
+
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository#encryption_configuration 
+
+  - https://docs.aws.amazon.com/AmazonECR/latest/userguide/encryption-at-rest.html 
+
+
+
+  Result 6
+
+
+
+  [aws-ecs-enable-container-insight][LOW] Resource 'module.ecs_resources:aws_ecs_cluster.cluster' does not have containerInsights enabled
+
+  /var/lib/jenkins/workspace/ceros-ski/modules/ecs_resources/main.tf:16-24
+
+
+
+
+
+      13 | * configuration, may as well define it first for clarity's sake.
+
+      14 | */
+
+      15 | 
+
+      16 | resource "aws_ecs_cluster" "cluster" {
+
+      17 |   name = var.ecs_cluster_name
+
+      18 | 
+
+      19 |   tags = {
+
+      20 |     Application = "ceros-ski"
+
+      21 |     Environment = var.environment
+
+      22 |     Resource = "modules.environment.aws_ecs_cluster.cluster"
+
+      23 |   }
+
+      24 | }
+
+      25 | 
+
+      26 | /*******************************************************************************
+
+      27 | * AutoScaling Group
+
+
+
+  Legacy ID:  AWS090
+
+  Impact:     Not all metrics and logs may be gathered for containers when Container Insights isn't enabled
+
+  Resolution: Enable Container Insights
+
+
+
+  More Info:
+
+  - https://tfsec.dev/docs/aws/ecs/enable-container-insight#aws/ecs 
+
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster#setting 
+
+  - https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights.html 
+
+
+
+  Result 7
+
+
+
+  [aws-elb-drop-invalid-headers][HIGH] Resource 'module.ecs_resources:aws_lb.ecs' does not drop invalid header fields
+
+  /var/lib/jenkins/workspace/ceros-ski/modules/ecs_resources/main.tf:255-267
+
+
+
+
+
+     252 | /**
+
+     253 | * The load balancer that is used by the ECS Services. 
+
+     254 | */
+
+     255 | resource "aws_lb" "ecs" {
+
+     256 |   name = var.aws_lb_ecs_name
+
+     257 |   internal = var.aws_lb_internal 
+
+     258 |   load_balancer_type = var.load_balancer_type 
+
+     259 |   security_groups = [aws_security_group.ecs_load_balancer.id]
+
+     260 |   subnets = [ var.public_subnet_1, var.public_subnet_2]
+
+     261 | 
+
+     262 |   tags = {
+
+     263 |     Application = "ceros-ski" 
+
+     264 |     Environment = var.environment
+
+     265 |     Resource = "modules.environment.aws_lb.ecs"
+
+     266 |   }
+
+     267 | }
+
+     268 | 
+
+     269 | /**
+
+     270 | * A target group to use with ceros-ski's backend ECS service.
+
+
+
+  Legacy ID:  AWS083
+
+  Impact:     Invalid headers being passed through to the target of the load balance may exploit vulnerabilities
+
+  Resolution: Set drop_invalid_header_fields to true
+
+
+
+  More Info:
+
+  - https://tfsec.dev/docs/aws/elb/drop-invalid-headers#aws/elb 
+
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb#drop_invalid_header_fields 
+
+  - https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html 
+
+
+
+  Result 8
+
+
+
+  [aws-elbv2-alb-not-public][HIGH] Resource 'module.ecs_resources:aws_lb.ecs' is exposed publicly.
+
+  /var/lib/jenkins/workspace/ceros-ski/modules/ecs_resources/main.tf:257
+
+
+
+
+
+     254 | */
+
+     255 | resource "aws_lb" "ecs" {
+
+     256 |   name = var.aws_lb_ecs_name
+
+     257 |   internal = var.aws_lb_internal 
+    bool: false
+
+     258 |   load_balancer_type = var.load_balancer_type 
+
+     259 |   security_groups = [aws_security_group.ecs_load_balancer.id]
+
+     260 |   subnets = [ var.public_subnet_1, var.public_subnet_2]
+
+
+
+  Legacy ID:  AWS005
+
+  Impact:     The load balancer is exposed on the internet
+
+  Resolution: Switch to an internal load balancer or add a tfsec ignore
+
+
+
+  More Info:
+
+  - https://tfsec.dev/docs/aws/elbv2/alb-not-public#aws/elbv2 
+
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb 
+
+
+
+  Result 9
+
+
+
+  [aws-iam-no-policy-wildcards][HIGH] Resource 'module.ecs_resources:data.aws_iam_policy_document.ecs_agent' defines a policy with wildcarded actions.
+
+  /var/lib/jenkins/workspace/ceros-ski/modules/ecs_resources/main.tf:42-59
+
+
+
+
+
+      39 | data "aws_iam_policy_document" "ecs_agent" {
+
+      40 |   statement {
+
+      41 |     effect = "Allow"
+
+      42 |     actions = [
+    list: ["ec2:DescribeTags", "ecs:CreateCluster", "ecs:DeregisterContainerInstance", "ecs:DiscoverPollEndpoint", "ecs:Poll", "ecs:RegisterContainerInstance", "ecs:StartTelemetrySession", "ecs:UpdateContainerInstancesState", "ecs:Submit*", "ecr:GetAuthorizationToken", "ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage", "logs:CreateLogStream", "logs:PutLogEvents", "s3:*"]
+
+      43 |       "ec2:DescribeTags",
+
+      44 |       "ecs:CreateCluster",
+
+      45 |       "ecs:DeregisterContainerInstance",
+
+      46 |       "ecs:DiscoverPollEndpoint",
+
+      47 |       "ecs:Poll",
+
+      48 |       "ecs:RegisterContainerInstance",
+
+      49 |       "ecs:StartTelemetrySession",
+
+      50 |       "ecs:UpdateContainerInstancesState",
+
+      51 |       "ecs:Submit*",
+
+      52 |       "ecr:GetAuthorizationToken",
+
+      53 |       "ecr:BatchCheckLayerAvailability",
+
+      54 |       "ecr:GetDownloadUrlForLayer",
+
+      55 |       "ecr:BatchGetImage",
+
+      56 |       "logs:CreateLogStream",
+
+      57 |       "logs:PutLogEvents",
+
+      58 |       "s3:*"
+
+      59 |     ]
+
+      60 |     resources = [
+
+      61 |       "*"
+
+      62 |     ]
+
+
+
+  Legacy ID:  AWS099
+
+  Impact:     Overly permissive policies may grant access to sensitive resources
+
+  Resolution: Specify the exact permissions required, and to which resources they should apply instead of using wildcards.
+
+
+
+  More Info:
+
+  - https://tfsec.dev/docs/aws/iam/no-policy-wildcards#aws/iam 
+
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document 
+
+  - https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html 
+
+
+
+  Result 10
+
+
+
+  [aws-vpc-no-public-egress-sg][CRITICAL] Resource 'module.ecs_resources:aws_security_group.autoscaling_group' defines a fully open egress security group.
+
+  /var/lib/jenkins/workspace/ceros-ski/modules/ecs_resources/main.tf:147
+
+
+
+
+
+     144 |     from_port   = 0
+
+     145 |     to_port     = 0
+
+     146 |     protocol    = "-1"
+
+     147 |     cidr_blocks = ["0.0.0.0/0"]
+    list: ["0.0.0.0/0"]
+
+     148 |   }
+
+     149 | 
+
+     150 |   tags = {
+
+
+
+  Legacy ID:  AWS009
+
+  Impact:     The port is exposed for egressing data to the internet
+
+  Resolution: Set a more restrictive cidr range
+
+
+
+  More Info:
+
+  - https://tfsec.dev/docs/aws/vpc/no-public-egress-sg#aws/vpc 
+
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group 
+
+
+
+  Result 11
+
+
+
+  [aws-autoscaling-enable-at-rest-encryption][HIGH] Resource 'module.ecs_resources:aws_launch_configuration.cluster' uses an unencrypted root EBS block device. Consider adding <blue>root_block_device{ encrypted = true }</blue>
+
+  /var/lib/jenkins/workspace/ceros-ski/modules/ecs_resources/main.tf:169-181
+
+
+
+
+
+     166 | /**
+
+     167 | * The launch configuration for the autoscaling group that backs our cluster.  
+
+     168 | */
+
+     169 | resource "aws_launch_configuration" "cluster" {
+
+     170 |   name = var.aws_launch_configuration_name
+
+     171 |   image_id = data.aws_ssm_parameter.cluster_ami_id.value 
+
+     172 |   instance_type = var.instance_type
+
+     173 |   iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
+
+     174 |   security_groups = [aws_security_group.autoscaling_group.id]
+
+     175 | 
+
+     176 |   // Register our EC2 instances with the correct ECS cluster.
+
+     177 |   user_data = <<EOF
+
+     178 | #!/bin/bash
+
+     179 | echo "ECS_CLUSTER=${aws_ecs_cluster.cluster.name}" >> /etc/ecs/ecs.config
+
+     180 | EOF
+
+     181 | }
+
+     182 | 
+
+     183 | /**
+
+     184 | * The autoscaling group that backs our ECS cluster.
+
+
+
+  Legacy ID:  AWS014
+
+  Impact:     The block device could be compromised and read from
+
+  Resolution: Turn on encryption for all block devices
+
+
+
+  More Info:
+
+  - https://tfsec.dev/docs/aws/autoscaling/enable-at-rest-encryption#aws/autoscaling 
+
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#ebs-ephemeral-and-root-block-devices 
+
+  - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/RootDeviceStorage.html 
+
+
+
+  Result 12
+
+
+
+  [aws-ecr-enforce-immutable-repository][HIGH] Resource 'module.aws_ecr_repository:aws_ecr_repository.ceros_ski' has `image_tag_mutability` attribute  not set to `IMMUTABLE`
+
+  /var/lib/jenkins/workspace/ceros-ski/modules/repositories/main.tf:18
+
+
+
+
+
+      15 | resource "aws_ecr_repository" "ceros_ski" {
+
+      16 |   
+
+      17 |   name  = var.aws_ecr_name
+
+      18 |   image_tag_mutability = var.aws_ecr_tag_mutability    string: "MUTABLE"
+
+      19 | 
+
+      20 |   image_scanning_configuration {
+
+      21 |     
+
+
+
+  Legacy ID:  AWS078
+
+  Impact:     Image tags could be overwritten with compromised images
+
+  Resolution: Only use immutable images in ECR
+
+
+
+  More Info:
+
+  - https://tfsec.dev/docs/aws/ecr/enforce-immutable-repository#aws/ecr 
+
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository 
+
+  - https://sysdig.com/blog/toctou-tag-mutability/ 
+
+
+
+  Result 13
+
+
+
+  [aws-vpc-no-public-ingress-sg][CRITICAL] Resource 'module.ecs_resources:aws_security_group.autoscaling_group' defines a fully open ingress security group.
+
+  /var/lib/jenkins/workspace/ceros-ski/modules/ecs_resources/main.tf:140
+
+
+
+
+
+     137 |     from_port   = 0 
+
+     138 |     to_port     = 0 
+
+     139 |     protocol    = "-1"
+
+     140 |     cidr_blocks = ["0.0.0.0/0"]
+    list: ["0.0.0.0/0"]
+
+     141 |   }
+
+     142 | 
+
+     143 |   egress {
+
+
+
+  Legacy ID:  AWS008
+
+  Impact:     The port is exposed for ingress from the internet
+
+  Resolution: Set a more restrictive cidr range
+
+
+
+  More Info:
+
+  - https://tfsec.dev/docs/aws/vpc/no-public-ingress-sg#aws/vpc 
+
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group 
+
+
+
+  times
+
+  ------------------------------------------
+
+  disk i/o             5.131295ms
+
+  parsing HCL          45.402µs
+
+  evaluating values    1.57903ms
+
+  running checks       8.114852ms
+
+
+
+  counts
+
+  ------------------------------------------
+
+  files loaded         13
+
+  blocks               11
+
+  evaluated blocks     93
+
+  modules              3
+
+  module blocks        82
+
+
+
+  results
+
+  ------------------------------------------
+
+  critical             5
+
+  high                 6
+
+  medium               0
+
+  low                  2
+
+  ignored              0
+
+
+
+  13 potential problems detected.
