@@ -50,7 +50,7 @@ pipeline {
     stage('OWASP ZAP - DAST') {
       steps {
        
-          sh 'docker run -t owasp/zap2docker-stable zap-api-scan.py -t http://ceros-ski-production-ecs-1051832142.us-east-1.elb.amazonaws.com/'
+          sh 'docker run -t owasp/zap2docker-stable zap-api-scan.py -t http://ceros-ski-production-ecs-1051832142.us-east-1.elb.amazonaws.com/ -t openapi'
         
       }
     }
