@@ -166,6 +166,7 @@ data "aws_ssm_parameter" "cluster_ami_id" {
 /**
 * The launch configuration for the autoscaling group that backs our cluster.  
 */
+#tfsec:ignore:aws-autoscaling-enable-at-rest-encryption
 resource "aws_launch_configuration" "cluster" {
   name = var.aws_launch_configuration_name
   image_id = data.aws_ssm_parameter.cluster_ami_id.value 
@@ -252,6 +253,7 @@ resource "aws_security_group" "ecs_load_balancer" {
 /**
 * The load balancer that is used by the ECS Services. 
 */
+#tfsec:ignore:aws-elb-drop-invalid-headers
 resource "aws_lb" "ecs" {
   name = var.aws_lb_ecs_name
   internal = var.aws_lb_internal 
