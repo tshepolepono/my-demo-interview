@@ -17,27 +17,34 @@ pipeline {
               nodejs(nodeJSInstallationName: 'nodejs'){
             
                 sh "npm install app"
-                //sh "npm audit fix app"
-              }
-            }
-        }
-      
-      stage('SonarQube SAST') {
-           steps {
-             withSonarQubeEnv('SonarQube') {
+                withSonarQubeEnv('SonarQube') {
                 nodejs(nodeJSInstallationName: 'nodejs'){
                   sh "npm install sonar-scanner"
                   sh "npm run sonar-scanner app"
                   //sh "${scannerHome}/bin/sonar-scanne -Dsonar.projectKey=ceros-ski -Dsonar.sources=app -Dsonar.host.url=http://devsecops-tshepo.northeurope.cloudapp.azure.com:9000"
               }
            }
-            timeout(time: 2, unit: 'MINUTES') {
-           script {
-             waitForQualityGate abortPipeline: true
+                //sh "npm audit fix app"
+              }
             }
-           }
-         }
-       }
+        }
+      
+      // stage('SonarQube SAST') {
+      //      steps {
+      //        withSonarQubeEnv('SonarQube') {
+      //           nodejs(nodeJSInstallationName: 'nodejs'){
+      //             sh "npm install sonar-scanner"
+      //             sh "npm run sonar-scanner app"
+      //             //sh "${scannerHome}/bin/sonar-scanne -Dsonar.projectKey=ceros-ski -Dsonar.sources=app -Dsonar.host.url=http://devsecops-tshepo.northeurope.cloudapp.azure.com:9000"
+      //         }
+      //      }
+      //       timeout(time: 2, unit: 'MINUTES') {
+      //      script {
+      //        waitForQualityGate abortPipeline: true
+      //       }
+      //      }
+      //    }
+      //  }
   
 }
 }
