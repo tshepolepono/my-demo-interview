@@ -44,8 +44,7 @@ pipeline {
     stage('IaaC - Dockerfile') {
            steps {
               sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego ./app/Dockerfile'
-              //force SUCCESS even if issues detected
-              sh 'exit 0'
+              
          }
        }
     stage('IaaC- Terraform Scan') {

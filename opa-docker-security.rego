@@ -77,11 +77,11 @@ deny[msg] {
 }
 
 # ... but do not root
-forbidden_users = [
-    "root",
-    "toor",
-    "0"
-]
+#forbidden_users = [
+#    "root",
+#    "toor",
+#    "0"
+#]
 
 deny[msg] {
     input[i].Cmd == "user"
