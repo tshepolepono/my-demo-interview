@@ -36,33 +36,29 @@ pipeline {
       
     stage('Vulnerability Image Scan - Docker') {
       steps {
+         
             sh "bash docker-image-scan.sh"
-          } 
-      }
-    
-    stage('IaaC Scanning') {
-      
-      steps {
-	     parallel(
-          "Terraform Scan - tfsec": {
-            agent {
-               docker { 
-                 image 'tfsec/tfsec-ci:v0.57.1' 
-                reuseNode true
-            }
-         }
-            sh '''
-          tfsec . --no-color
-            '''
-          },
-          "Dockerfile- OPA Conftest": {
-            sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego ./app/Dockerfile'
-         }
-         )
-        
+          
       }
     }
-    
+    stage('IaaC - Dockerfile') {
+           steps {
+              sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego ./app/Dockerfile'
+         }
+       }
+    stage('IaaC- Terraform Scan') {
+      agent {
+        docker { 
+          image 'tfsec/tfsec-ci:v0.57.1' 
+          reuseNode true
+        }
+      }
+      steps {
+        sh '''
+          tfsec . --no-color
+        '''
+      }
+    }
 }
 
 }
