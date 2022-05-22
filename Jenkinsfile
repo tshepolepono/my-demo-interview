@@ -26,7 +26,9 @@ pipeline {
            steps {
              withSonarQubeEnv('SonarQube') {
                 nodejs(nodeJSInstallationName: 'nodejs'){
-                  sh "mvn sonar:sonar -Dsonar.projectKey=ceros-ski -Dsonar.sources=app -Dsonar.host.url=http://devsecops-tshepo.northeurope.cloudapp.azure.com:9000"
+                  sh "npm install sonar-scanner"
+                  sh "npm run sonar-scanner"
+                  //sh "${scannerHome}/bin/sonar-scanne -Dsonar.projectKey=ceros-ski -Dsonar.sources=app -Dsonar.host.url=http://devsecops-tshepo.northeurope.cloudapp.azure.com:9000"
               }
            }
             timeout(time: 2, unit: 'MINUTES') {
