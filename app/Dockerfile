@@ -1,8 +1,12 @@
-FROM node:alpine
-RUN addgroup -S pipeline && adduser -S docker-pipeline -G pipeline
-USER docker-pipeline
+FROM node:latest
+
 WORKDIR /usr/src/app
+
 COPY . .
-RUN npm ci --only-production && npm run build
+RUN npm install && npm run build
+
 EXPOSE 80
 CMD ["npm", "start"]
+
+
+

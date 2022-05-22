@@ -1,23 +1,25 @@
-// Devsecops pipeline ok check
+/*******************************************************************************
+*  devsecops  pipeline
+*
+* The below docker images uses different security tools to scan for known issues in 
+*code
+* Software Composition Analysis using Synk tool
+* Static Application Security Analysis using nodejsscan
+* Container Security: Scan base image for known vulnerabilities
+* IaC Dockefile scan: using OPA Confest
+* IaC terraform: Using tfsec tool
+* *****************************************************************************/
+
 pipeline {
   agent any
   
-
-  
   stages {
-      stage('Clone') {
-            steps {
-              git branch: 'main', url: 'https://github.com/tshepolepono/my-demo-interview.git'
-            }
-        }
-  
-  //check pwd
-  stage('Download packages') {
+     
+        stage('Download packages') {
             steps {
               nodejs(nodeJSInstallationName: 'nodejs'){
             
                 sh "npm install app"
-                //sh "npm audit fix app"
               }
             }
         }
@@ -27,20 +29,18 @@ pipeline {
               }
             }
         
-     
-      stage('nodejsscan - SAST') {
+      stage('SAST - nodejsscan') {
            steps {
              sh "nodejsscan -d app" 
          }
        }
       
-    stage('Vulnerability Image Scan - Docker') {
-      steps {
-         
-            sh "bash docker-image-scan.sh"
-          
-      }
-    }
+      stage('Vulnerability Image Scan - Docker') {
+           steps {
+             sh "bash docker-image-scan.sh"
+      
+         }
+       }
     stage('IaaC - Dockerfile') {
            steps {
               sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego ./app/Dockerfile'
@@ -53,12 +53,11 @@ pipeline {
           reuseNode true
         }
       }
-      steps {
-        sh '''
-          tfsec . --no-color
-        '''
+           steps {
+             sh '''
+               tfsec . --no-color
+                '''
+        }
       }
-    }
-}
-
+   }
 }
