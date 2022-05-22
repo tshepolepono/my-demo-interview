@@ -25,7 +25,7 @@ pipeline {
       stage('SonarQube SAST') {
            steps {
              script{ 
-             def scannerHome = tool 'sonarscan';
+             def scannerHome = tool name: 'sonar_scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation';
              withSonarQubeEnv('SonarQube') {
                 nodejs(nodeJSInstallationName: 'nodejs'){
                   sh "${tool('scannerHome')}/bin/sonar-scanner -Dsonar.projectKey=ceros-ski -Dsonar.sources=app -Dsonar.host.url=http://devsecops-tshepo.northeurope.cloudapp.azure.com:9000"
