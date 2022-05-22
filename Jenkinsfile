@@ -2,7 +2,7 @@
 pipeline {
   agent any
 
-  // stages {
+  stages {
   //     stage('Clone') {
   //           steps {
   //             git branch: 'main', url: 'https://github.com/tshepolepono/my-demo-interview.git'
