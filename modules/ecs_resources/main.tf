@@ -136,14 +136,14 @@ resource "aws_security_group" "autoscaling_group" {
   ingress {
     from_port   = 0 
     to_port     = 0 
-    protocol    = "-1"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -230,14 +230,14 @@ resource "aws_security_group" "ecs_load_balancer" {
     description = "HTTP Ingress"
     from_port   = 80 
     to_port     = 80
-    protocol    = "-1"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
