@@ -49,6 +49,19 @@ pipeline {
          )
       }
     }
+    stage('Scan Terraform Code') {
+      agent {
+        docker { 
+          image 'tfsec/tfsec-ci:v1.21.2' 
+          reuseNode true
+        }
+      }
+      steps {
+        sh '''
+          tfsec . --no-color
+        '''
+      }
+    }
 }
 
 }
