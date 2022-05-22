@@ -22,7 +22,7 @@ pipeline {
             }
         }
       
-      stage('SonarQube SAST') {
+      stage('nodejsscan - SAST') {
            steps {
           //   // script{ 
           //    //def scannerHome = tool name: 'sonar_scanner';
@@ -37,7 +37,7 @@ pipeline {
           //    waitForQualityGate abortPipeline: true
           //   }
           //  }
-             sh "npm audit"
+             sh "nodejsscan -d app"
          }
        }
   
