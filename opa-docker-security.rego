@@ -67,16 +67,28 @@ deny[msg] {
 }
 
 # Any user...
-any_user {
-    input[i].Cmd == "user"
- }
+#any_user {
+#    input[i].Cmd == "user"
+# }
+
+#deny[msg] {
+#   not any_user
+#   msg = "Do not run as root, use USER instead"
+#}
+
+# ... but do not root
+forbidden_users = [
+    "root",
+    "toor",
+    "0"
+]
 
 deny[msg] {
-    not any_user
-    msg = "Do not run as root, use USER instead"
+    input[i].Cmd == "user"
+    val := input[i].Value
+    contains(lower(val[_]), forbidden_users[_])
+   msg = sprintf("Line %d: Do not run as root: %s", [i, val])
 }
-
-
 
 # Do not sudo
 deny[msg] {
