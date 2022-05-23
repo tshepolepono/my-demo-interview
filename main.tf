@@ -1,3 +1,11 @@
+/*******************************************************************************
+*  Terraform modules
+*
+* 1. Create ecr repository
+* terraform plan and apply on -target="module.repository.aws_ecr_repository.ceros_ski" 
+* 2. Build, Tag and push the image
+* 3. run terraform plan and apply
+* *****************************************************************************/
 provider "aws" {
   region = var.aws_region 
   shared_credentials_file = var.aws_credentials_file
@@ -7,15 +15,15 @@ provider "aws" {
 terraform {
   required_version = ">= 0.14.4"
 }
-
+# Creates ecr repository with scan on push
 module "aws_ecr_repository"{
    source = "./modules/repositories"
    ecr_scan_on_push = true
-   aws_ecr_tag_mutability = "MUTABLE"
+   aws_ecr_tag_mutability = "IMMUTABLE"
    aws_ecr_name = "ceros-ski"
 
 }
-
+//Create VPC and 2 subnets based on user provides cidr, azs
 module "networking"{
      source = "./modules/networking"
      #VPC Settings
@@ -33,6 +41,7 @@ module "networking"{
      
 }
 
+#Module to create ecs cluster with iam roles, security groups, alb, asg
 module "ecs_resources"{
     vpc_id = module.networking.vpc_id
     public_subnet_1 = module.networking.public_subnet_1_id

@@ -23,13 +23,6 @@ resource "aws_ecs_cluster" "cluster" {
   }
 }
 
-/*******************************************************************************
-* AutoScaling Group
-*
-* The autoscaling group that will generate the instances used by the ECS
-* cluster.
-*
-********************************************************************************/
 
 /**
 * The IAM policy needed by the ecs agent to allow it to manage the instances
@@ -181,6 +174,13 @@ echo "ECS_CLUSTER=${aws_ecs_cluster.cluster.name}" >> /etc/ecs/ecs.config
 EOF
 }
 
+/*******************************************************************************
+* AutoScaling Group
+*
+* The autoscaling group that will generate the instances used by the ECS
+* cluster.
+*
+********************************************************************************/
 /**
 * The autoscaling group that backs our ECS cluster.
 */
