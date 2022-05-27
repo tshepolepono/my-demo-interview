@@ -48,12 +48,12 @@ pipeline {
               
          }
        }
-    stage('DAST -OWASP ZAP') {
-      steps {
-          sh 'docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-weekly zap-api-scan.py -t http://ceros-ski-production-ecs-1051832142.us-east-1.elb.amazonaws.com/ -f openapi'
+    // stage('DAST -OWASP ZAP') {
+    //   steps {
+    //       sh 'docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-weekly zap-api-scan.py -t http://ceros-ski-production-ecs-1051832142.us-east-1.elb.amazonaws.com/ -f openapi'
         
-      }
-    }
+    //   }
+    // }
     stage('IaaC- Terraform Scan') {
       agent {
         docker { 
