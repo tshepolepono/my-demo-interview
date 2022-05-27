@@ -8,6 +8,7 @@
 * Container Security: Scan base image for known vulnerabilities
 * IaC Dockefile scan: using OPA Confest
 * IaC terraform: Using tfsec tool
+*
 * *****************************************************************************/
 
 pipeline {
